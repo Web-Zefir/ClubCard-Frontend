@@ -1,0 +1,36 @@
+.admin-panel {
+  padding: 20px;
+  background-color: #FFFFFF;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.admin-panel h2 {
+  font-size: 36px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.admin-panel .user-card,
+.admin-panel .card-request {
+  border: 1px solid #D3D3D3;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #F5F5F5;
+  margin-bottom: 20px;
+}
+
+.admin-panel select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #D3D3D3;
+}
+
+.admin-panel button {
+  background-color: #00AAe6;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
