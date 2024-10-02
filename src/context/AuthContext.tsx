@@ -2,7 +2,7 @@ import React, { createContext, useState, ReactNode } from 'react';
 import { api } from '../utils/api';
 import { User } from '../types/types';
 
-interface AuthContextType {
+interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => Promise<{ accessToken: string, refreshToken: string }>;
   logout: () => void;
@@ -18,7 +18,7 @@ interface AuthContextType {
   ) => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextProps | null>(null);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -60,7 +60,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('Пароли не совпадают');
       throw new Error('Пароли не совпадают');
     }
-
     try {
       const response = await api.post('/auth/signup', {
         email,
@@ -73,7 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         phoneNumber,
       });
 
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken, refreshToken } = response.data; // снова извлекаем токены 
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 

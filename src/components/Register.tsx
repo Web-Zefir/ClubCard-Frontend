@@ -22,7 +22,6 @@ const Register: React.FC = () => {
 
   useEffect(() => {
     setIsFormValid(
-      Object.keys(errors).length === 0 &&
       isChecked &&
       email !== '' &&
       password !== '' &&
@@ -38,24 +37,20 @@ const Register: React.FC = () => {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    // Email validation
     const emailPattern = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
     if (!emailPattern.test(email)) {
       newErrors.email = "Введите правильный E-mail!";
     }
 
-    // Password validation
     const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
     if (!passwordPattern.test(password)) {
       newErrors.password = "Пароль должен содержать минимум 8 символов, включая цифру, заглавную и строчную буквы!";
     }
 
-    // Confirm password validation
     if (password !== confirmPassword) {
       newErrors.confirmPassword = "Пароли не совпадают!";
     }
 
-    // Name validation
     const namePattern = /^[a-zA-Zа-яА-ЯёЁ]+$/;
     if (!namePattern.test(firstName)) {
       newErrors.firstName = "Имя должно содержать только буквы!";
@@ -67,13 +62,11 @@ const Register: React.FC = () => {
       newErrors.secondName = "Отчество должно содержать только буквы!";
     }
 
-    // Phone number validation
     const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
     if (!phonePattern.test(phoneNumber)) {
       newErrors.phoneNumber = "Введите правильный номер телефона!";
     }
 
-    // Birthday validation
     const birthdayPattern = /^\d{2}\.\d{2}\.\d{4}$/;
     if (!birthdayPattern.test(birthday)) {
       newErrors.birthday = "Введите дату в формате ДД.ММ.ГГГГ!";
@@ -245,7 +238,7 @@ const Register: React.FC = () => {
               setPhoneNumber(formattedValue);
             }}
             className={errors.phoneNumber ? "error" : ""}
-            maxLength={18} // +7 (xxx) xxx-xx-xx -> 18 characters
+            maxLength={18} // +7 (xxx) xxx-xx-xx
           />
           {errors.phoneNumber && (
             <small className="error-message">{errors.phoneNumber}</small>
@@ -253,6 +246,7 @@ const Register: React.FC = () => {
         </div>
 
         <div className="consent-checkbox">
+
           <input
             type="checkbox"
             checked={isChecked}
@@ -260,7 +254,7 @@ const Register: React.FC = () => {
           />
           <span className='checkbox-text'>
             Нажимая кнопку «Зарегистрироваться», Вы даёте согласие на 
-            <a href="https://t1.ru/documents/personal_data_politics/" role="switch" target='_blanc' className='checkbox-link'>обработку персональных данных</a>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_61801/6c94959bc017ac80140621762d2ac59f6006b08c/" role="switch" target='_blank' className='checkbox-link'>Обработку персональных данных</a>
           </span>
         </div>
 

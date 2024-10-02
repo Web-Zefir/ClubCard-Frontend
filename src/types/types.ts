@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 
 export interface User {
-    birthday: ReactNode;
-    phoneNumber: ReactNode;
+    birthday: string;
+    phoneNumber: string | null;
     secondName: ReactNode;
     lastName: ReactNode;
     firstName: ReactNode;
@@ -13,11 +13,8 @@ export interface User {
   }
   
 export interface CardRequest {
+    user: User | null;
     id: string;
     type: string;
     status: 'pending' | 'ready' | 'blocked' | 'approved' | 'rejected';
 }
-  
-
-  
-  

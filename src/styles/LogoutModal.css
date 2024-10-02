@@ -1,10 +1,7 @@
 /* Стили для модального окна */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
@@ -16,13 +13,8 @@
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 300px;
-}
-
-.modal-buttons {
-  margin-top: 20px;
+  width: 350;
 }
 
 .button-confirm {
@@ -32,7 +24,7 @@
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  transition: 0.5s;
+  transition: 0.3s;
   margin-right: 10px;
 }
 
@@ -53,5 +45,4 @@
 
 .button-cancel:hover {
   background-color: #999;
-  transform: scale(1.05);
 }

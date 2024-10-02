@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // import { useAuth } from '../context/useAuth'; 
 import '../styles/Header.css';
-import LogoT1 from '../assets/T1 1.svg';
 import LogoutModal from './LogoutModal';
 import { useAuth } from '../context/useAuth';
 
@@ -32,7 +31,6 @@ const Header: React.FC = () => {
     <header className='header'>
       <nav className='Header-nav'>
         <div>
-        <img src={LogoT1} alt="T1 logo" />
         </div>
         <div className='Header-links'>
         <Link className='nav-links' to="/">Главная</Link>
@@ -40,7 +38,7 @@ const Header: React.FC = () => {
         <Link className='nav-links' to="/login">Вход</Link>
         <Link className='nav-links' to="/profile">Пользователь</Link>
         <Link className='nav-links' to="/admin">Администратор</Link>
-        <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className='nav-links'>
+        <a href="#" onClick={() => { handleLogout(); }} className='nav-links'>
           Выйти
         </a> 
         </div>

@@ -5,6 +5,7 @@ import QRCode from 'qrcode.react';
 import '../styles/UserProfile.css';
 import { jwtDecode } from 'jwt-decode';
 
+
 interface DecodedToken {
   role: string[];
   user_id: number;

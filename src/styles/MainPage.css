@@ -1,8 +1,9 @@
 .main-page {
   padding: 20px;
   background-color: #FFFFFF;
-  max-width: 100%;
+  max-width: 30%;
   margin: auto;
+  background-color: #F5F5F5;
 }
 
 .main-page h2 {
@@ -31,4 +32,21 @@
 
 .card-customization input[type="file"] {
   margin: 15px 0;
+}
+
+.main-page {
+  padding: 20px;
+}
+
+.cards-container {
+  display: inline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 30rem;
+  padding-left: 30rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }

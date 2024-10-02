@@ -1,0 +1,39 @@
+.club-card {
+    
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .card-title {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  .card-price {
+    font-size: 1.2em;
+    margin-bottom: 1em;
+  }
+  
+  .card-features {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 1em;
+  }
+  
+  .purchase-button {
+    padding: 10px 20px;
+    background-color: #00aae6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .purchase-button:hover {
+    background-color: #007aff;
+  }
+  

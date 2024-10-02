@@ -18,7 +18,7 @@
 .Header-nav {
   display: flex;
   justify-content: space-between;
-  gap: 20vh;
+  gap: 35vh;
 }
 .Header-links {
   margin-top: 1rem;

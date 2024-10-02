@@ -15,10 +15,10 @@ const AdminPanel: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersResponse = await api.get('/admin/users');
+        const usersResponse = await api.get('/user/all');
         setUsers(usersResponse.data);
 
-        const cardsResponse = await api.get('/admin/cards');
+        const cardsResponse = await api.get('/card-type/all');
         setCards(cardsResponse.data);
       } catch (error) {
         const axiosError = error as AxiosError<ErrorResponse>;
@@ -31,7 +31,7 @@ const AdminPanel: React.FC = () => {
 
   const handlePrivilegeChange = async (userId: string, privilege: User['privilege']) => {
     try {
-      await api.patch(`/admin/users/privilege${userId}/update`, { privilege });
+      await api.patch(`/card-type/${userId}/`, { privilege });
       setMessage(`User privilege updated to ${privilege}`);
       setUsers(users.map(user => user.id === userId ? { ...user, privilege } : user));
     } catch (error) {
