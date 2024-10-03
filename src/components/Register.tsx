@@ -3,17 +3,32 @@ import { useAuth } from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Register.css';
 
-const Register: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [secondName, setSecondName] = useState<string>('');
-  const [birthday, setBirthday] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+interface FormState {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  secondName: string;
+  birthday: string;
+  phoneNumber: string;
+  isChecked: boolean;
+}
 
+const initialFormState: FormState = {
+  email: '',
+  password: '',
+  confirmPassword: '',
+  firstName: '',
+  lastName: '',
+  secondName: '',
+  birthday: '',
+  phoneNumber: '',
+  isChecked: false,
+};
+
+const Register: React.FC = () => {
+  const [formState, setFormState] = useState<FormState>(initialFormState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
@@ -22,53 +37,53 @@ const Register: React.FC = () => {
 
   useEffect(() => {
     setIsFormValid(
-      isChecked &&
-      email !== '' &&
-      password !== '' &&
-      confirmPassword !== '' &&
-      firstName !== '' &&
-      lastName !== '' &&
-      secondName !== '' &&
-      birthday !== '' &&
-      phoneNumber !== ''
+      formState.isChecked &&
+      formState.email !== '' &&
+      formState.password !== '' &&
+      formState.confirmPassword !== '' &&
+      formState.firstName !== '' &&
+      formState.lastName !== '' &&
+      formState.secondName !== '' &&
+      formState.birthday !== '' &&
+      formState.phoneNumber !== ''
     );
-  }, [errors, isChecked, email, password, confirmPassword, firstName, lastName, secondName, birthday, phoneNumber]);
+  }, [errors, formState]);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
     const emailPattern = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-    if (!emailPattern.test(email)) {
+    if (!emailPattern.test(formState.email)) {
       newErrors.email = "Введите правильный E-mail!";
     }
 
     const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-    if (!passwordPattern.test(password)) {
+    if (!passwordPattern.test(formState.password)) {
       newErrors.password = "Пароль должен содержать минимум 8 символов, включая цифру, заглавную и строчную буквы!";
     }
 
-    if (password !== confirmPassword) {
+    if (formState.password !== formState.confirmPassword) {
       newErrors.confirmPassword = "Пароли не совпадают!";
     }
 
     const namePattern = /^[a-zA-Zа-яА-ЯёЁ]+$/;
-    if (!namePattern.test(firstName)) {
+    if (!namePattern.test(formState.firstName)) {
       newErrors.firstName = "Имя должно содержать только буквы!";
     }
-    if (!namePattern.test(lastName)) {
+    if (!namePattern.test(formState.lastName)) {
       newErrors.lastName = "Фамилия должна содержать только буквы!";
     }
-    if (!namePattern.test(secondName)) {
+    if (!namePattern.test(formState.secondName)) {
       newErrors.secondName = "Отчество должно содержать только буквы!";
     }
 
-    const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
-    if (!phonePattern.test(phoneNumber)) {
+    const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\д{2}$/;
+    if (!phonePattern.test(formState.phoneNumber)) {
       newErrors.phoneNumber = "Введите правильный номер телефона!";
     }
 
-    const birthdayPattern = /^\d{2}\.\d{2}\.\d{4}$/;
-    if (!birthdayPattern.test(birthday)) {
+    const birthdayPattern = /^\d{2}\.\d{2}\.\д{4}$/;
+    if (!birthdayPattern.test(formState.birthday)) {
       newErrors.birthday = "Введите дату в формате ДД.ММ.ГГГГ!";
     }
 
@@ -79,17 +94,17 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (validateForm() && isChecked) {
+    if (validateForm() && formState.isChecked) {
       try {
         await register(
-          email,
-          password,
-          confirmPassword,
-          firstName,
-          lastName,
-          secondName,
-          birthday,
-          phoneNumber
+          formState.email,
+          formState.password,
+          formState.confirmPassword,
+          formState.firstName,
+          formState.lastName,
+          formState.secondName,
+          formState.birthday,
+          formState.phoneNumber
         );
         console.log('Registration successful');
         navigate('/login');
@@ -99,11 +114,12 @@ const Register: React.FC = () => {
     }
   };
 
-  const handleInputChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>,
-    fieldName: string
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value);
+  const handleInputChange = (fieldName: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      [fieldName]: fieldName === 'isChecked' ? e.target.checked : e.target.value,
+    }));
+
     if (errors[fieldName]) {
       setErrors((prev) => ({ ...prev, [fieldName]: '' }));
     }
@@ -111,8 +127,7 @@ const Register: React.FC = () => {
 
   const formatPhoneNumber = (value: string) => {
     const digits = value.replace(/\D/g, '');
-    
-    const match = digits.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);
+    const match = digits.match(/^(\d{1})(\д{3})(\д{3})(\д{2})(\д{2})$/);
     if (match) {
       return `+7 (${match[2]}) ${match[3]}-${match[4]}-${match[5]}`;
     }
@@ -121,8 +136,7 @@ const Register: React.FC = () => {
 
   const formatBirthday = (value: string) => {
     const digits = value.replace(/\D/g, '');
-    
-    const match = digits.match(/^(\d{2})(\d{2})(\d{4})$/);
+    const match = digits.match(/^(\д{2})(\д{2})(\д{4})$/);
     if (match) {
       return `${match[1]}.${match[2]}.${match[3]}`;
     }
@@ -137,8 +151,8 @@ const Register: React.FC = () => {
           <input
             type="email"
             placeholder="Электронная почта"
-            value={email}
-            onChange={handleInputChange(setEmail, "email")}
+            value={formState.email}
+            onChange={handleInputChange("email")}
             className={errors.email ? "error" : ""}
           />
           {errors.email && (
@@ -150,8 +164,8 @@ const Register: React.FC = () => {
           <input
             type="password"
             placeholder="Пароль"
-            value={password}
-            onChange={handleInputChange(setPassword, "password")}
+            value={formState.password}
+            onChange={handleInputChange("password")}
             className={errors.password ? "error" : ""}
           />
           {errors.password && (
@@ -163,8 +177,8 @@ const Register: React.FC = () => {
           <input
             type="password"
             placeholder="Повторите пароль"
-            value={confirmPassword}
-            onChange={handleInputChange(setConfirmPassword, "confirmPassword")}
+            value={formState.confirmPassword}
+            onChange={handleInputChange("confirmPassword")}
             className={errors.confirmPassword ? "error" : ""}
           />
           {errors.confirmPassword && (
@@ -176,8 +190,8 @@ const Register: React.FC = () => {
           <input
             type="text"
             placeholder="Фамилия"
-            value={lastName}
-            onChange={handleInputChange(setLastName, "lastName")}
+            value={formState.lastName}
+            onChange={handleInputChange("lastName")}
             className={errors.lastName ? "error" : ""}
           />
           {errors.lastName && (
@@ -189,8 +203,8 @@ const Register: React.FC = () => {
           <input
             type="text"
             placeholder="Имя"
-            value={firstName}
-            onChange={handleInputChange(setFirstName, "firstName")}
+            value={formState.firstName}
+            onChange={handleInputChange("firstName")}
             className={errors.firstName ? "error" : ""}
           />
           {errors.firstName && (
@@ -202,8 +216,8 @@ const Register: React.FC = () => {
           <input
             type="text"
             placeholder="Отчество"
-            value={secondName}
-            onChange={handleInputChange(setSecondName, "secondName")}
+            value={formState.secondName}
+            onChange={handleInputChange("secondName")}
             className={errors.secondName ? "error" : ""}
           />
           {errors.secondName && (
@@ -215,10 +229,10 @@ const Register: React.FC = () => {
           <input
             type="text"
             placeholder="День рождения (ДД.ММ.ГГГГ)"
-            value={birthday}
+            value={formState.birthday}
             onChange={(e) => {
               const formattedValue = formatBirthday(e.target.value);
-              setBirthday(formattedValue);
+              setFormState((prev) => ({ ...prev, birthday: formattedValue }));
             }}
             className={errors.birthday ? "error" : ""}
             maxLength={10}
@@ -232,10 +246,10 @@ const Register: React.FC = () => {
           <input
             type="text"
             placeholder="Номер телефона"
-            value={phoneNumber}
+            value={formState.phoneNumber}
             onChange={(e) => {
               const formattedValue = formatPhoneNumber(e.target.value);
-              setPhoneNumber(formattedValue);
+              setFormState((prev) => ({ ...prev, phoneNumber: formattedValue }));
             }}
             className={errors.phoneNumber ? "error" : ""}
             maxLength={18} // +7 (xxx) xxx-xx-xx
@@ -246,22 +260,18 @@ const Register: React.FC = () => {
         </div>
 
         <div className="consent-checkbox">
-
           <input
             type="checkbox"
-            checked={isChecked}
-            onChange={(e) => setIsChecked(e.target.checked)}
+            checked={formState.isChecked}
+            onChange={handleInputChange("isChecked")}
           />
-          <span className='checkbox-text'>
-            Нажимая кнопку «Зарегистрироваться», Вы даёте согласие на 
-            <a href="https://www.consultant.ru/document/cons_doc_LAW_61801/6c94959bc017ac80140621762d2ac59f6006b08c/" role="switch" target='_blank' className='checkbox-link'>Обработку персональных данных</a>
-          </span>
+          <span>Согласен с правилами</span>
         </div>
 
         <button
           type="submit"
-          disabled={!isFormValid || !isChecked}
-          className={!isFormValid || !isChecked ? "disabled" : ""}
+          disabled={!isFormValid || !formState.isChecked}
+          className={!isFormValid || !formState.isChecked ? "disabled" : ""}
         >
           Зарегистрироваться
         </button>
